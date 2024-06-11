@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       task.value = taskContent.textContent;
       const btn = document.createElement("button");
 
-      btn.textContent = "Update";
+      // btn.textContent = "Update";
       form.appendChild(btn);
     }
   }
