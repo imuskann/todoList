@@ -1,23 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const task = document.querySelector("#task");
+  const userInput = document.querySelector("#task");
   const btn = document.querySelector("#add");
   const list = document.querySelector(".list");
-  const edit = document.querySelector(".edit");
-  const form = document.querySelector("form");
-  // const del_btn = document.querySelector(".del");
+
   let isEditing = false;
   let currentTaskItem = null;
 
   btn.addEventListener("click", handleClick);
   list.addEventListener("click", handleListClick);
-  edit.addEventListener("click", handleEditClick);
 
   //function
   function handleClick(e) {
     e.preventDefault();
-    const taskInput = task.value;
+    const taskInput = userInput.value.trim();
     if (taskInput === "") {
       alert("Please enter a task");
+      return;
+    }
+
+    if (isEditing) {
+      currentTaskItem.querySelector("p").textContent = taskInput;
+      resetForm();
     } else {
       list.innerHTML += `
     <li>
@@ -30,8 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </li>
        `;
-      task.value = "";
     }
+
+    userInput.value = "";
   }
 
   function handleListClick(e) {
@@ -40,12 +44,18 @@ document.addEventListener("DOMContentLoaded", () => {
       item.remove();
     } else if (e.target.classList.contains("edit")) {
       const taskItem = e.target.closest("li");
-      const taskContent = taskItem.querySelector("p");
-      task.value = taskContent.textContent;
-      const btn = document.createElement("button");
+      const taskContent = taskItem.querySelector("p").textContent;
+      userInput.value = taskContent;
 
-      // btn.textContent = "Update";
-      form.appendChild(btn);
+      isEditing = true;
+      currentTaskItem = taskItem;
+      btn.textContent = "Update Task";
     }
+  }
+
+  function resetForm() {
+    isEditing = false;
+    currentTaskItem = null;
+    btn.textContent = "Add Task";
   }
 });
